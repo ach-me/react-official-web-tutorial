@@ -1,20 +1,28 @@
 import React, { Component, createContext } from 'react';
+import Button from '@material-ui/core/Button';
+import Card from '@material-ui/core/Card';
+import CardActions from '@material-ui/core/CardActions';
+import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
+import Grid from '@material-ui/core/Grid';
 
 const Context = createContext({});
 const MyProvider = Context.Provider;
 const MyConsumer = Context.Consumer;
 
 const User = () => (
-  <div>
+  <Card>
     <UserProfile />
-  </div>
+  </Card>
 );
 
 const UserProfile = () => (
   <MyConsumer>
     {({ state }) => (
       <div>
-        <h2>Profile page of {state.username}</h2>
+        <Typography variant="display1" component="h2">
+          Profile page of {state.username}
+        </Typography>
         <UserDetails />
       </div>
     )}
@@ -22,20 +30,28 @@ const UserProfile = () => (
 );
 
 const UserDetails = () => (
-  <div>
-    <MyConsumer>
-      {({ state, actions }) => (
-        <div>
-          <p>Username: {state.username}</p>
+  <MyConsumer>
+    {({ state, actions }) => (
+      <div>
+        <CardContent>
+          <Typography variant="subheading" component="p">
+            Username: {state.username}
+          </Typography>
           <p>First name: {state.firstName}</p>
           <p>Lastname: {state.lastName}</p>
           <p>Age: {state.age}</p>
-          <button onClick={actions.sumAge}>Sum age</button>
-          <button onClick={actions.restAge}>Rest age</button>
-        </div>
-      )}
-    </MyConsumer>
-  </div>
+        </CardContent>
+        <CardActions className="card-actions">
+          <Button variant="text" color="primary" onClick={actions.sumAge}>
+            Sum age
+          </Button>
+          <Button variant="raised" color="secondary" size="large" onClick={actions.restAge}>
+            Rest Age
+          </Button>
+        </CardActions>
+      </div>
+    )}
+  </MyConsumer>
 );
 
 class App extends Component {
@@ -50,7 +66,7 @@ class App extends Component {
 
   render() {
     return (
-      <div>
+      <Grid container>
         <MyProvider
           value={{
             state: this.state.user,
@@ -76,7 +92,7 @@ class App extends Component {
         >
           <User />
         </MyProvider>
-      </div>
+      </Grid>
     );
   }
 }
